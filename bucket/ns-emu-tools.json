@@ -1,0 +1,28 @@
+{
+    "##": "This file is a template. Fill the blanks and add or remove fields as necessary.",
+    "version": "0.6.2",
+    "description": "一个用于安装/更新 NS 模拟器的工具",
+    "homepage": "https://github.com/triwinds/ns-emu-tools",
+    "license": "AGPL-3.0",
+    "notes": "",
+    "architecture": {
+        "64bit": {
+            "url": "https://github.com/triwinds/ns-emu-tools/releases/download/0.6.2/NsEmuTools-windows-portable.zip",
+            "hash": "eb7ed3b47783ff983aff68cff34e6816be66f81d1440b62dac873ef3e3d0b6b3"
+        }
+    },
+    "shortcuts": [
+        [
+            "NsEmuTools.exe",
+            "NsEmuTools"
+        ]
+    ],
+    "checkver": "github",
+    "autoupdate": {
+        "architecture": {
+            "64bit": {
+                "url": "https://github.com/triwinds/ns-emu-tools/releases/download/$version/NsEmuTools-windows-portable.zip"
+            }
+        }
+    }
+}
