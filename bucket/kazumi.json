@@ -14,7 +14,7 @@
     "persist": [
         "AppData\\Roaming\\com.example\\kazumi"
     ],
-    "checkver": "github"，
+    "checkver": "github",
     "autoupdate": {
         "architecture": {
             "64bit": {
