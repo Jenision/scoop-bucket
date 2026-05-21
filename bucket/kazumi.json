@@ -8,11 +8,14 @@
     "architecture": {
         "64bit": {
             "url": "https://github.com/Predidit/Kazumi/releases/download/2.1.2/Kazumi_windows_2.1.2.zip",
-            "hash": "sha256:ca11059f53eafdb4a7e716e6ecd82e7c4a909ce4ddebdfe2474c4a7665fe7697"
-        },
-    "bin": "kazumi.exe",
-    "persist": [
-        "AppData\\Roaming\\com.example\\kazumi"
+            "hash": "ca11059f53eafdb4a7e716e6ecd82e7c4a909ce4ddebdfe2474c4a7665fe7697"
+        }
+    },
+    "shortcuts": [
+        [
+            "kazumi.exe",
+            "Kazumi"
+        ]
     ],
     "checkver": "github",
     "autoupdate": {
