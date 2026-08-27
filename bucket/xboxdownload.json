@@ -1,0 +1,34 @@
+{
+    "version": "3.0.0.65",
+    "description": "Xbox Download Assistant (Xbox下载助手) — Supports download acceleration for Xbox, Microsoft Store, PlayStation, Nintendo Switch, EA App, Battle.net, Epic Games, Ubisoft Connect, Riot Games, and Rockstar Games, and fixes access issues for Steam Store & Community and GitHub.",
+    "homepage": "https://github.com/skydevil88/XboxDownload",
+    "license": "Freeware",
+    "architecture": {
+        "64bit": {
+            "url": "https://github.com/skydevil88/XboxDownload/releases/download/v3.0.0.65/XboxDownload-windows-x64.zip",
+            "hash": "4ba8378ecaf42217616058f34fd4cac772dc6ced8e9ef529dbaf078880773787"
+        },
+        "arm64": {
+            "url": "https://github.com/skydevil88/XboxDownload/releases/download/v3.0.0.65/XboxDownload-windows-arm64.zip",
+            "hash": "bfc61d26fe573c832cc7f3280749bdd8caa3ca11cb7f9a692628fd8a77207973"
+        }
+    },
+    "bin": "XboxDownload.exe",
+    "shortcuts": [
+        [
+            "XboxDownload.exe",
+            "XboxDownload"
+        ]
+    ],
+    "checkver": "github",
+    "autoupdate": {
+        "architecture": {
+            "64bit": {
+                "url": "https://github.com/skydevil88/XboxDownload/releases/download/v$version/XboxDownload-windows-x64.zip"
+            },
+            "arm64": {
+                "url": "https://github.com/skydevil88/XboxDownload/releases/download/v$version/XboxDownload-windows-arm64.zip"
+            }
+        }
+    }
+}
