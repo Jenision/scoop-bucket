@@ -9,6 +9,7 @@
             "hash": "bd9a625038479e31375b800b4689924609e27b72c6f48b03820f0acda1666a14"
         }
     },
+    "extract_dir": "NSGManager_x64",
     "bin": "NSGManager.exe",
     "shortcuts": [
         [
