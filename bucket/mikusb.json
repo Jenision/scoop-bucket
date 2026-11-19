@@ -18,7 +18,6 @@
     ],
     "persist": [
         "Config",
-        "Resources",
         "sdk-certs",
         "logs"
     ],
