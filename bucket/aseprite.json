@@ -1,0 +1,52 @@
+{
+    "version": "1.3.18.6",
+    "description": "Animated sprite editor & pixel art tool (personal build fetched from private repository).",
+    "homepage": "https://www.aseprite.org/",
+    "license": {
+        "identifier": "Proprietary",
+        "url": "https://github.com/aseprite/aseprite/blob/main/EULA.txt"
+    },
+    "notes": [
+        "This manifest downloads your personal build from the private repository Jenision/aseprite-build.",
+        "Authentication requires either GitHub CLI ('scoop install gh && gh auth login') or the GITHUB_TOKEN environment variable."
+    ],
+    "url": "https://raw.githubusercontent.com/Jenision/scoop-bucket/84d115fa83f24ac5e237f7c88f5b528bfb9427d1/LICENSE#/placeholder.txt",
+    "hash": "6b0382b16279f26ff69014300541967a356a666eb0b91b422f6862f6b7dad17e",
+    "pre_install": [
+        "Remove-Item \"$dir\\placeholder.txt\" -Force -ErrorAction SilentlyContinue",
+        "$repo = 'Jenision/aseprite-build'",
+        "$tag = \"v$version\"",
+        "$downloaded = $null",
+        "if (Get-Command gh -ErrorAction SilentlyContinue) {",
+        "    gh release download $tag --repo $repo --pattern 'Aseprite-*-Windows-x64.zip' --dir \"$dir\" --clobber",
+        "    if ($LASTEXITCODE -ne 0) {",
+        "        Write-Host \"Tag $tag not found in $repo, falling back to latest release...\" -ForegroundColor Yellow",
+        "        gh release download --repo $repo --pattern 'Aseprite-*-Windows-x64.zip' --dir \"$dir\" --clobber",
+        "        if ($LASTEXITCODE -ne 0) { throw \"Failed to download Aseprite from $repo via gh CLI. Run 'gh auth login' and ensure a release exists.\" }",
+        "    }",
+        "    $downloaded = Get-ChildItem -Path \"$dir\" -Filter 'Aseprite-*-Windows-x64.zip' | Select-Object -First 1",
+        "} else {",
+        "    $token = if ($env:SCOOP_GITHUB_TOKEN) { $env:SCOOP_GITHUB_TOKEN } else { $env:GITHUB_TOKEN }",
+        "    if (-not $token) { throw \"Missing GitHub auth. Install gh CLI ('scoop install gh && gh auth login') or set GITHUB_TOKEN env var.\" }",
+        "    $headers = @{ 'Authorization' = \"Bearer $token\"; 'User-Agent' = 'scoop-aseprite'; 'Accept' = 'application/vnd.github+json' }",
+        "    try { $rel = Invoke-RestMethod -Uri \"https://api.github.com/repos/$repo/releases/tags/$tag\" -Headers $headers }",
+        "    catch { $rel = Invoke-RestMethod -Uri \"https://api.github.com/repos/$repo/releases/latest\" -Headers $headers }",
+        "    $asset = $rel.assets | Where-Object { $_.name -like 'Aseprite-*-Windows-x64.zip' } | Select-Object -First 1",
+        "    if (-not $asset) { throw \"No Aseprite Windows x64 zip asset found in $repo release $($rel.tag_name).\" }",
+        "    $zipPath = Join-Path \"$dir\" $asset.name",
+        "    $dlHeaders = @{ 'Authorization' = \"Bearer $token\"; 'User-Agent' = 'scoop-aseprite'; 'Accept' = 'application/octet-stream' }",
+        "    Invoke-WebRequest -Uri $asset.url -Headers $dlHeaders -OutFile $zipPath",
+        "    $downloaded = Get-Item $zipPath",
+        "}",
+        "if (-not $downloaded) { throw \"Aseprite archive was not downloaded into $dir.\" }",
+        "Expand-Archive -Path $downloaded.FullName -DestinationPath \"$dir\" -Force",
+        "Remove-Item $downloaded.FullName -Force"
+    ],
+    "bin": "aseprite.exe",
+    "shortcuts": [
+        [
+            "aseprite.exe",
+            "Aseprite"
+        ]
+    ]
+}
