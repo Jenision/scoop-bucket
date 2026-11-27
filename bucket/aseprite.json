@@ -8,7 +8,7 @@
     },
     "notes": [
         "This manifest downloads your personal build from the private repository Jenision/aseprite-build.",
-        "Authentication uses your existing Git Credential Manager (github.com), GitHub CLI (gh), or GITHUB_TOKEN."
+        "Simplified Chinese (zh_Hans.ini) from aseprite/strings is bundled automatically. Switch via Edit -> Preferences -> General -> Language."
     ],
     "url": "https://raw.githubusercontent.com/Jenision/scoop-bucket/84d115fa83f24ac5e237f7c88f5b528bfb9427d1/LICENSE#/placeholder.txt",
     "hash": "6b0382b16279f26ff69014300541967a356a666eb0b91b422f6862f6b7dad17e",
@@ -45,7 +45,15 @@
         "}",
         "if (-not $downloaded) { throw \"Aseprite archive was not downloaded into $dir.\" }",
         "Expand-Archive -Path $downloaded.FullName -DestinationPath \"$dir\" -Force",
-        "Remove-Item $downloaded.FullName -Force"
+        "Remove-Item $downloaded.FullName -Force",
+        "$stringsDir = Join-Path \"$dir\" 'data\\strings'",
+        "if (Test-Path $stringsDir) {",
+        "    try {",
+        "        Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/aseprite/strings/main/zh_Hans.ini' -OutFile (Join-Path $stringsDir 'zh_Hans.ini')",
+        "    } catch {",
+        "        Write-Host \"Warning: Failed to download Simplified Chinese translation: $($_.Exception.Message)\" -ForegroundColor Yellow",
+        "    }",
+        "}"
     ],
     "bin": "aseprite.exe",
     "shortcuts": [
