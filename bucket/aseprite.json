@@ -8,7 +8,7 @@
     },
     "notes": [
         "This manifest downloads your personal build from the private repository Jenision/aseprite-build.",
-        "Authentication requires either GitHub CLI ('scoop install gh && gh auth login') or the GITHUB_TOKEN environment variable."
+        "Authentication uses your existing Git Credential Manager (github.com), GitHub CLI (gh), or GITHUB_TOKEN."
     ],
     "url": "https://raw.githubusercontent.com/Jenision/scoop-bucket/84d115fa83f24ac5e237f7c88f5b528bfb9427d1/LICENSE#/placeholder.txt",
     "hash": "6b0382b16279f26ff69014300541967a356a666eb0b91b422f6862f6b7dad17e",
@@ -22,12 +22,17 @@
         "    if ($LASTEXITCODE -ne 0) {",
         "        Write-Host \"Tag $tag not found in $repo, falling back to latest release...\" -ForegroundColor Yellow",
         "        gh release download --repo $repo --pattern 'Aseprite-*-Windows-x64.zip' --dir \"$dir\" --clobber",
-        "        if ($LASTEXITCODE -ne 0) { throw \"Failed to download Aseprite from $repo via gh CLI. Run 'gh auth login' and ensure a release exists.\" }",
+        "        if ($LASTEXITCODE -ne 0) { throw \"Failed to download Aseprite from $repo via gh CLI.\" }",
         "    }",
         "    $downloaded = Get-ChildItem -Path \"$dir\" -Filter 'Aseprite-*-Windows-x64.zip' | Select-Object -First 1",
         "} else {",
         "    $token = if ($env:SCOOP_GITHUB_TOKEN) { $env:SCOOP_GITHUB_TOKEN } else { $env:GITHUB_TOKEN }",
-        "    if (-not $token) { throw \"Missing GitHub auth. Install gh CLI ('scoop install gh && gh auth login') or set GITHUB_TOKEN env var.\" }",
+        "    if (-not $token -and (Get-Command git -ErrorAction SilentlyContinue)) {",
+        "        $cred = \"protocol=https`nhost=github.com`n`n\" | git credential fill 2>$null",
+        "        $pwLine = $cred | Where-Object { $_ -like 'password=*' } | Select-Object -First 1",
+        "        if ($pwLine) { $token = $pwLine.Substring(9).Trim() }",
+        "    }",
+        "    if (-not $token) { throw \"Missing GitHub auth. Sign in to Git Credential Manager, install gh, or set GITHUB_TOKEN.\" }",
         "    $headers = @{ 'Authorization' = \"Bearer $token\"; 'User-Agent' = 'scoop-aseprite'; 'Accept' = 'application/vnd.github+json' }",
         "    try { $rel = Invoke-RestMethod -Uri \"https://api.github.com/repos/$repo/releases/tags/$tag\" -Headers $headers }",
         "    catch { $rel = Invoke-RestMethod -Uri \"https://api.github.com/repos/$repo/releases/latest\" -Headers $headers }",
